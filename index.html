@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>Leaflet Routing Machine Example</title>
+    <link rel="stylesheet" href="./css/leaflet.css">
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css"
+    />
+    
+    <link
+      rel="stylesheet"
+      href="./leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.css"
+    />
+    <link
+    rel="stylesheet"
+    href="./leaflet-locatecontrol-gh-pages/leaflet-locatecontrol-gh-pages/dist/L.Control.Locate.min.css"
+  />
+  <script src="./leaflet-locatecontrol-gh-pages/leaflet-locatecontrol-gh-pages/dist/L.Control.Locate.min.js"></script>
+    <style>
+      .map {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    
+    <select name="select-lugar" id="select-lugar"></select>
+    <button id="ruta">ruta</button> <button id="actual">ubicacion actual</button>
+    <p id="ubicacion"></p>
+    <div id="map" class="map"></div>
+    <script src="./puntosT.js"></script>
+    <script src="./js/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js"></script>
+   
+    <script src="./leaflet-routing-machine-3.2.12/dist/leaflet-routing-machine.js"></script>
+   
+    <script>
+      var map = L.map("map").setView([-17.9647, -67.106], 15);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: "© OpenStreetMap contributors",
+      }).addTo(map);
+      //   var marker=L.marker([-17.9647, -67.106]).addTo(map);
+      var puntosT = L.geoJSON(puntosT, {
+        onEachFeature: function (feature, layer) {
+          const popupContent =
+            "<b>Lugar Turistico: " +
+            feature.properties.nombre +
+            "</b><br>" +
+            feature.properties.descrip;
+          layer.bindPopup(popupContent);
+        },
+      }).addTo(map);
+    //   L.control.locate().addTo(map);
+      // map.on("click", function (e) {
+      //     var endMarker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+      // });
+      select_lugar();
+      function select_lugar() {
+        const xhttp = new XMLHttpRequest();
+        xhttp.open("GET", "./lugaresTur_WGS84.geojson", true);
+        xhttp.send();
+        xhttp.onreadystatechange = function () {
+          if (this.readyState == 4 && this.status == 200) {
+            // console.log(this.responseText);
+            let datos = JSON.parse(this.responseText);
+            console.log(datos.features);
+            let res = document.querySelector("#select-lugar");
+            res.innerHTML = `<option value="-1" selected>Seleccione un lugar</option>`;
+            for (let item of datos.features) {
+              console.log(item.properties.nombre);
+              res.innerHTML += `
+                  <option value="${item.properties.Y},${item.properties.X}">${item.properties.id}.-${item.properties.nombre}</option>
+                  `;
+            }
+          }
+        };
+        document
+          .getElementById("select-lugar")
+          .addEventListener("change", function (e) {
+            let coords = e.target.value.split(",");
+            map.flyTo(coords, 18);
+          });
+      }
+      
+    //   ubicar();
+    //   function ubicar() {
+    //     document
+    //       .getElementById("select-lugar")
+    //       .addEventListener("change", function (e) {
+    //         let coords = e.target.value.split(",");
+    //         // console.log(coords);
+    //         map.flyTo(coords, 15);
+
+    //         L.Routing.control({
+    //           waypoints: [L.latLng(-17.9855736, -67.1342101), L.latLng(coords)],
+    //           //   routeWhileDragging: true,
+    //         }).addTo(map);
+    //       });
+    //   }
+    //   document.getElementById("ruta").addEventListener("click", ubicar);
+      //   console.log(valores);
+    //  document.getElementById('ruta').addEventListener('click',ruta);
+    //   function ruta() {
+    //     L.Routing.control({
+    //       waypoints: [
+    //         L.latLng([-17.9855736, -67.1342101]),
+    //         L.latLng(-17.4855736, -67.242101),
+    //       ],
+    //       //   routeWhileDragging: true,
+    //     }).addTo(map);
+    //   }
+
+      //   document.getElementById('select-lugar').getAttribute('value')
+    </script>
+    <script src="./locallizacion.js"></script>
+  </body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <select name="select-pais" id="select-pais">
+        <option value="12,45">Bolivia</option>
+        <option value="-61,12" selected>Argentina</option>
+        <option value="-17,67">Chile</option>
+    </select>
+    <script>
+        //  var coords=document.getElementById('select').value
+        //  console.log(coords)
+        document.getElementById('select-pais').onchange=function(){
+           let valor=this.value
+           console.log(valor)
+        }
+        // coords.addEventListener('change',()=>{
+        //     let valor=coords.target.value
+        //     console.log(value)
+        // })
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+#banner{
+    display: inline-block;
+    width: 100%;
+    height: 200px;
+
+}
+  html,
+  body,
+#mapa {
+    height: 90vh;
+    width: 100vw;
+   
+  }
+  .bk {
+    background-color: #2596be;
+  }
+[data-content]{
+    display: none;
+}
+.active[data-content]{
+    display: block;
+}
+/*estilo chatgpt  */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+}
+.content-section {
+  display: none;
+}
+
+.content-section.active {
+  display: block;
+}
+
+
